@@ -1,0 +1,6 @@
+/* static/css/custom.css */
+#projectsTable, .dataTables_wrapper, .dataTables_length, .dataTables_filter {
+    width: auto !important; /* Override any pre-existing width settings */
+    margin-left: 10 !important; /* Align to the left */
+    text-align: left !important; /* Text align left */
+}

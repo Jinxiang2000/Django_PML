@@ -23,7 +23,7 @@ class Project(models.Model):
     project_manager = models.ForeignKey('Staff', on_delete=models.SET_NULL, null=True, related_name='managed_projects')
     
     def __str__(self):
-        return self.title
+        return f'{self.project_id} - {self.title}'
     
     def get_absolute_url(self):
         return reverse('project_detail', kwargs={'pk': self.pk})

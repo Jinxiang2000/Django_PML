@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Welcome to Project Management System</h1>
+    <p class="lead">This is a project management web app built with Django.</p>
+
+    <!-- Link to the Projects App -->
+    <div class="mt-3">
+        <a href="{% url 'project_list' %}" class="btn btn-primary">View All Projects</a>
+    </div>
+</div>
+{% endblock %}

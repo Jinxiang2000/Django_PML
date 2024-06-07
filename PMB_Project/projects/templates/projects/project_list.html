@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Projects List</h1>
+
+<!-- Add New Project Button -->
+<a href="{% url 'project_create' %}" class="btn btn-primary">Create New Project</a>
+
+<table id="projectsTable" class="display">
+    <thead>
+        <tr>
+            <th>Project ID</th>
+            <th>Title</th>
+            <th>Project Manager</th>
+            <th>Status</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Phase</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in projects %}
+        <tr>
+            <td>{{ project.project_id }}</td>
+            <td>{{ project.title }}</td>
+            <td>{{ project.project_manager.name }}</td>
+            <td>{{ project.activity_status }}</td>
+            <td>{{ project.start_date}}</td>
+            <td>{{ project.end_date}}</td>
+            <td>{{ project.current_phase}}</td>
+            <td>
+                <a href="{% url 'project_detail' pk=project.project_id %}">View</a> |
+                <a href="{% url 'project_edit' pk=project.project_id %}">Edit</a> |
+                <a href="{% url 'project_delete' pk=project.project_id %}" class="delete-btn" data-pid="{{ project.project_id }}" data-title="{{ project.title }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<script>
+$(document).ready(function() {
+    $('#projectsTable').DataTable();
+
+});
+</script>
+{% endblock %}

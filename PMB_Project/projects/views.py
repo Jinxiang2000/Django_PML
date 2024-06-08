@@ -17,7 +17,7 @@ def project_detail(request, pk):
     project = get_object_or_404(Project, pk=pk)
     return render(request, 'projects/project_detail.html', {'project': project})
 
-'''
+
 def project_create(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
@@ -28,7 +28,7 @@ def project_create(request):
         form = ProjectForm()
     return render(request, 'projects/project_form.html', {'form': form})
 
-def project_edit(request, pk):
+def project_update(request, pk):
     project = get_object_or_404(Project, pk=pk)
     if request.method == "POST":
         form = ProjectForm(request.POST, instance=project)
@@ -37,9 +37,9 @@ def project_edit(request, pk):
             return redirect('project_detail', pk=project.pk)
     else:
         form = ProjectForm(instance=project)
-    return render(request, 'projects/project_form.html', {'form': form})
-'''
+    return render(request, 'projects/project_form.html', {'form': form, 'project': project})
 
+'''
 def project_create_or_update(request, pk=None):
     if pk:
         project = get_object_or_404(Project, pk=pk)
@@ -56,6 +56,28 @@ def project_create_or_update(request, pk=None):
 
 
 
+def project_create_or_update(request, pk=None):
+    if pk:  # If an ID is provided, this should be an update operation
+        project = get_object_or_404(Project, pk=pk)
+        if request.method == 'POST':
+            form = ProjectForm(request.POST, instance=project)  # Pass instance for updating
+            if form.is_valid():
+                form.save()
+                return redirect('project_list')
+        else:
+            form = ProjectForm(instance=project)
+    else:  # No ID provided, treat as a new project
+        if request.method == 'POST':
+            form = ProjectForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('project_list')
+        else:
+            form = ProjectForm()
+
+    return render(request, 'projects/project_form.html', {'form': form})
+
+'''
 def project_delete(request, pk):
     project = get_object_or_404(Project, pk=pk)
     if request.method == 'POST':

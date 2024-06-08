@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="container mt-4">
     <h1>{{ project.title }}</h1>
@@ -16,7 +16,7 @@
         <dt class="col-sm-3">End Date:</dt>
         <dd class="col-sm-9">{{ project.end_date|default:"N/A" }}</dd>
     </dl>
-    <a href="{% url 'project_edit' pk=project.project_id %}" class="btn btn-primary">Edit Project</a>
+    <a href="{% url 'project_update' pk=project.project_id %}" class="btn btn-primary">Update Project</a>
     <a href="{% url 'project_list' %}" class="btn btn-secondary">Back to Project List</a>
 </div>
 {% endblock %}

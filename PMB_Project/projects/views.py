@@ -17,6 +17,7 @@ def project_detail(request, pk):
     project = get_object_or_404(Project, pk=pk)
     return render(request, 'projects/project_detail.html', {'project': project})
 
+'''
 def project_create(request):
     if request.method == 'POST':
         form = ProjectForm(request.POST)
@@ -37,6 +38,23 @@ def project_edit(request, pk):
     else:
         form = ProjectForm(instance=project)
     return render(request, 'projects/project_form.html', {'form': form})
+'''
+
+def project_create_or_update(request, pk=None):
+    if pk:
+        project = get_object_or_404(Project, pk=pk)
+        form = ProjectForm(request.POST or None, instance=project)
+    else:
+        form = ProjectForm(request.POST or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('project_list')
+
+    return render(request, 'projects/project_form.html', {'form': form})
+
+
 
 def project_delete(request, pk):
     project = get_object_or_404(Project, pk=pk)
@@ -48,13 +66,79 @@ def project_delete(request, pk):
 #Project Staff View
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from .models import ProjectStaff
-from .forms import ProjectStaffForm
+from .forms import ProjectStaffForm,ProjectLvlStaffForm
 
 class ProjectStaffListView(ListView):
     model = ProjectStaff
     context_object_name = 'project_staff'
     template_name = 'projects/project_staff_list.html'
 
+#Project Level Staff List
+class ProjectStaffManageView(ListView):
+    model = ProjectStaff
+    template_name = 'projects/project_lvl_staff_list.html'
+    context_object_name = 'project_staff'
+
+    def get_queryset(self):
+        """
+        This method enhances the queryset by ensuring that it not only filters by project_id
+        but also selects related data to prevent multiple database hits per row when accessing related fields.
+        """
+        return ProjectStaff.objects.filter(project_id=self.kwargs['pk']).select_related('staff')
+
+    def get_context_data(self, **kwargs):
+        """
+        Adds the project to the context data, ensuring the template can display details about the project
+        alongside the staff information.
+        """
+        context = super().get_context_data(**kwargs)
+        # Safely get the project object with handling for DoesNotExist
+        context['project'] = get_object_or_404(Project, pk=self.kwargs['pk'])
+        return context
+    
+class ProjectLvlStaffCreateView(CreateView):
+    model = ProjectStaff
+    form_class = ProjectLvlStaffForm
+    template_name = 'projects/project_staff_form.html'
+   
+
+    def get_form_kwargs(self):
+        kwargs = super(ProjectStaffCreateView, self).get_form_kwargs()
+        project = self.kwargs.get('project_pk')  # Assuming you capture 'project_pk' from the URL
+        if project:
+            kwargs['instance'] = ProjectStaff(project=project)
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('project_lvl_staff_manage', kwargs={'pk': self.object.project.pk})
+
+class ProjectLvlStaffUpdateView(UpdateView):
+    model = ProjectStaff
+    form_class = ProjectLvlStaffForm
+    template_name = 'projects/project_staff_form.html'
+    
+
+    def get_form_kwargs(self):
+        kwargs = super(ProjectStaffCreateView, self).get_form_kwargs()
+        project = self.kwargs.get('project_pk')  # Assuming you capture 'project_pk' from the URL
+        if project:
+            kwargs['instance'] = ProjectStaff(project=project)
+        return kwargs
+
+    def get_success_url(self):
+        return reverse('project_lvl_staff_manage', kwargs={'pk': self.object.project.pk})
+
+class ProjectLvlStaffDeleteView(DeleteView):
+    model = ProjectStaff
+    context_object_name = 'project_staff'
+    template_name = 'projects/project_staff_confirm_delete.html'
+    
+
+    def get_success_url(self):
+        return reverse('project_lvl_staff_manage', kwargs={'pk': self.kwargs['project_pk']})
+
+    
+#Overall Project Staff List
 class ProjectStaffCreateView(CreateView):
     model = ProjectStaff
     form_class = ProjectStaffForm

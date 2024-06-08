@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+
 {% block content %}
-<div class="container mt-4">
+<div class="container">
     <h1>{% if not form.instance.pk %}Add New Staff{% else %}Edit Staff{% endif %}</h1>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}
         <button type="submit" class="btn btn-success">Submit</button>
-        <a href="{% url 'project_staff_list' %}" class="btn btn-secondary">Back to Staff List</a>
+        <a href="{% url 'project_staff_list'%}" class="btn btn-secondary">Back to Staff List</a>
     </form>
 </div>
 {% endblock %}

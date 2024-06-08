@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Staff for Project: {{ project.project_id }} - {{ project.title }}</h2>
+    <a href="{% url 'project_staff_add' project_pk=project.project_id %}" class="btn btn-primary">Add New Staff</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Role</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for staff in project_staff %}
+            <tr>
+                <td>{{ staff.staff.name }}</td>
+                <td>{{ staff.role }}</td>
+                <td>{{ staff.staff.email }}</td>
+                <td>
+                    <a href="{% url 'project_staff_edit' project_pk=project.project_id pk=staff.id %}">Edit</a> |
+                    <a href="{% url 'project_staff_delete' project_pk=project.project_id pk=staff.id %}">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        $(document).ready(function() {
+            $('#staffTable').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "searching": true
+            });
+        });
+        </script>
+    <a href="{% url 'project_list' %}" class="btn btn-secondary">Back to Projects List</a>
+</div>
+{% endblock %}

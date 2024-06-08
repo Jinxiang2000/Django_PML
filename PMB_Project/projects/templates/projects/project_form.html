@@ -1,14 +1,12 @@
 {% extends 'base.html' %}
-
+{% load crispy_forms_tags %}
 {% block content %}
 <div class="container mt-4">
     <h2>Edit Project</h2>
-    <form method="post" class="needs-validation" novalidate>
+    <form method="post" action="{% if project.pk %}{% url 'project_update' project.pk %}{% else %}{% url 'project_create' %}{% endif %}">
         {% csrf_token %}
-        <div class="mb-3">
-            {{ form.as_p }}
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success">Save</button>
     </form>
 </div>
 {% endblock %}

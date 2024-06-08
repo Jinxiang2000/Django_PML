@@ -45,8 +45,9 @@
             <td>{{ project.current_phase}}</td>
             <td>
                 <a href="{% url 'project_detail' pk=project.project_id %}">View</a> |
-                <a href="{% url 'project_edit' pk=project.project_id %}">Edit</a> |
-                <a href="{% url 'project_delete' pk=project.project_id %}" class="delete-btn" data-pid="{{ project.project_id }}" data-title="{{ project.title }}">Delete</a>
+                <a href="{% url 'project_update' pk=project.project_id %}">Edit</a> |
+                <a href="{% url 'project_delete' pk=project.project_id %}" class="delete-btn" data-pid="{{ project.project_id }}" data-title="{{ project.title }}">Delete</a> |
+                <a href="{% url 'project_lvl_staff_manage' pk=project.project_id %}">Staff</a>
             </td>
         </tr>
         {% endfor %}

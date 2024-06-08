@@ -39,45 +39,7 @@ def project_update(request, pk):
         form = ProjectForm(instance=project)
     return render(request, 'projects/project_form.html', {'form': form, 'project': project})
 
-'''
-def project_create_or_update(request, pk=None):
-    if pk:
-        project = get_object_or_404(Project, pk=pk)
-        form = ProjectForm(request.POST or None, instance=project)
-    else:
-        form = ProjectForm(request.POST or None)
 
-    if request.method == 'POST':
-        if form.is_valid():
-            form.save()
-            return redirect('project_list')
-
-    return render(request, 'projects/project_form.html', {'form': form})
-
-
-
-def project_create_or_update(request, pk=None):
-    if pk:  # If an ID is provided, this should be an update operation
-        project = get_object_or_404(Project, pk=pk)
-        if request.method == 'POST':
-            form = ProjectForm(request.POST, instance=project)  # Pass instance for updating
-            if form.is_valid():
-                form.save()
-                return redirect('project_list')
-        else:
-            form = ProjectForm(instance=project)
-    else:  # No ID provided, treat as a new project
-        if request.method == 'POST':
-            form = ProjectForm(request.POST)
-            if form.is_valid():
-                form.save()
-                return redirect('project_list')
-        else:
-            form = ProjectForm()
-
-    return render(request, 'projects/project_form.html', {'form': form})
-
-'''
 def project_delete(request, pk):
     project = get_object_or_404(Project, pk=pk)
     if request.method == 'POST':
@@ -117,7 +79,7 @@ class ProjectStaffManageView(ListView):
         # Safely get the project object with handling for DoesNotExist
         context['project'] = get_object_or_404(Project, pk=self.kwargs['pk'])
         return context
-    
+'''
 class ProjectLvlStaffCreateView(CreateView):
     model = ProjectStaff
     form_class = ProjectLvlStaffForm
@@ -133,6 +95,20 @@ class ProjectLvlStaffCreateView(CreateView):
 
     def get_success_url(self):
         return reverse('project_lvl_staff_manage', kwargs={'pk': self.object.project.pk})
+'''   
+def add_project_staff(request, project_pk):
+    project = get_object_or_404(Project, pk=project_pk)
+    if request.method == 'POST':
+        form = ProjectLvlStaffForm(request.POST, project=project)
+        if form.is_valid():
+            project_staff = form.save(commit=False)
+            project_staff.project = project # Ensure the project is assigned
+            project_staff.save()
+            return redirect('project_lvl_staff_manage', pk=project_pk)
+    else:
+        form = ProjectLvlStaffForm(project=project)
+    return render(request, 'projects/project_staff_form.html', {'form': form, 'project': project})
+
 
 class ProjectLvlStaffUpdateView(UpdateView):
     model = ProjectStaff

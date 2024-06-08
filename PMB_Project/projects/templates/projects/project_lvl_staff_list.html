@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container">
     <h2>Staff for Project: {{ project.project_id }} - {{ project.title }}</h2>
-    <a href="{% url 'project_staff_add' project_pk=project.project_id %}" class="btn btn-primary">Add New Staff</a>
+    <a href="{% url 'project_lvl_staff_add' project_pk=project.project_id %}" class="btn btn-primary">Add New Staff</a>
     <table class="table">
         <thead>
             <tr>

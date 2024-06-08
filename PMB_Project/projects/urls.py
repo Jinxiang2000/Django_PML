@@ -15,7 +15,7 @@ urlpatterns = [
 
     #Project Level Staff URL
     path('project/<slug:pk>/staff/', views.ProjectStaffManageView.as_view(), name='project_lvl_staff_manage'),
-    path('project/<slug:project_pk>/staff/add/', views.ProjectStaffCreateView.as_view(), name='project_staff_add'),
+    path('project/<slug:project_pk>/staff/add/', views.add_project_staff, name='project_lvl_staff_add'),
     path('project/<slug:project_pk>/staff/<slug:pk>/edit/', views.ProjectStaffUpdateView.as_view(), name='project_staff_edit'),
     path('project/<slug:project_pk>/staff/<slug:pk>/delete/', views.ProjectStaffDeleteView.as_view(), name='project_staff_delete'),
 ]

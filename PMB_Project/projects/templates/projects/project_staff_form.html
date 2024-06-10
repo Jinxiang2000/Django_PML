@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="container">
-    <h1>{% if not form.instance.pk %}Add New Staff{% else %}Edit Staff{% endif %}</h1>
+    <h1>{% if not form.instance.pk %}Add New Project Staff{% else %}Edit Staff{% endif %}</h1>
     <form method="post">
         {% csrf_token %}
         {{ form|crispy }}

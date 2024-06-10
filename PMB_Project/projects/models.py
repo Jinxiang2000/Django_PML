@@ -51,12 +51,12 @@ class ProjectStaff(models.Model):
 
 class Contract(models.Model):
     contract_no = models.CharField(max_length=50, primary_key=True)
-    title = models.CharField(max_length=255)
-    prime_vendor = models.CharField(max_length=255)
-    contract_manager = models.CharField(max_length=255)
-    start_date = models.DateField()
+    title = models.CharField(max_length=255,null=True, blank=True)
+    prime_vendor = models.CharField(max_length=255,null=True, blank=True)
+    contract_manager = models.CharField(max_length=255,null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
-    contract_type = models.CharField(max_length=255)
+    contract_type = models.CharField(max_length=255,null=True, blank=True)
 
     def __str__(self):
         return self.title
